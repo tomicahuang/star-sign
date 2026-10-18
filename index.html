@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>星座速查・星盤</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌙</text></svg>">
+  <script>if (localStorage.getItem('star-sign.theme') === 'light') document.documentElement.dataset.theme = 'light';</script>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <main>
+    <div class="top">
+      <h1>星座速查 <small>太陽・月亮・上升・完整星盤</small></h1>
+      <button id="theme" type="button">白底</button>
+    </div>
+
+    <form id="form" class="panel" autocomplete="off">
+      <div class="row">
+        <label>名字（選填）<input id="name" type="text" placeholder="例：小明"></label>
+      </div>
+      <div class="row two">
+        <label>出生日期<input id="birthDate" type="date" min="1900-01-01" max="2100-12-31" required></label>
+        <label>出生時間<input id="birthTime" type="time"></label>
+      </div>
+      <label class="check"><input id="unknownTime" type="checkbox"> 不知道出生時間（不算上升、天頂、宮位）</label>
+      <div class="row">
+        <label>出生地<select id="place"></select></label>
+      </div>
+      <div id="customBox" class="row three" hidden>
+        <label>緯度（北為正）<input id="customLat" type="number" step="0.001" placeholder="25.033"></label>
+        <label>經度（東為正）<input id="customLon" type="number" step="0.001" placeholder="121.565"></label>
+        <label>時區<select id="customTz"></select></label>
+      </div>
+      <p id="error" class="error"></p>
+      <div class="buttons">
+        <button type="submit" class="primary">查詢</button>
+        <button type="button" id="saveBtn">存起來並查詢</button>
+      </div>
+      <div id="peopleBox" hidden>
+        <div class="people-title">已存的人（點名字直接看）</div>
+        <div id="people" class="people"></div>
+      </div>
+    </form>
+
+    <section id="result" class="panel" hidden></section>
+
+    <details class="panel help">
+      <summary>太陽、月亮、上升、各行星、宮位、相位是什麼意思？</summary>
+      <ul>
+        <li><b>太陽星座</b>：平常說的「我是什麼座」，看出生日期就大致知道，代表核心個性與人生方向。太陽每月換一個星座，交界那天才需要看時間。</li>
+        <li><b>月亮星座</b>：代表內心情緒、真正讓自己安心的方式，常被說是「私底下的妳」。月亮大約每 2.5 天換一個星座，所以要看出生日期和時間。</li>
+        <li><b>上升星座</b>：出生那一刻東方地平線上的星座，代表給人的第一印象與外在風格。大約每 2 小時換一個，需要準確的出生時間和地點。</li>
+        <li><b>水星、金星、火星</b>：個人行星，分別看思考溝通、愛情審美、行動力，跟日常生活最相關。</li>
+        <li><b>木星、土星</b>：木星約一年換一個星座（幸運、擴展），土星約兩年半（責任、人生課題），同年紀的人常相同。</li>
+        <li><b>天王星、海王星、冥王星</b>：一個星座待 7～20 年以上，是同一代人的共同特質，標示「世代」。</li>
+        <li><b>℞ 逆行</b>：從地球看行星像在倒退走，傳統上代表那顆星的特質比較內化、反覆思考。</li>
+        <li><b>天頂（MC）</b>：出生時頭頂正上方的黃道位置，代表事業方向與社會形象，需要出生時間。</li>
+        <li><b>十二宮位</b>：把人生分成 12 個領域（財帛、夫妻、官祿……），看行星落在哪一宮就知道它影響哪方面。本頁用 Placidus 分宮制。</li>
+        <li><b>相位</b>：行星之間的角度。三分、六分偏和諧（藍線），四分、對分偏緊張（紅線），合相是兩顆星綁在一起。</li>
+        <li><b>北交點</b>：月亮軌道與黃道的交點，常被說成這輩子要學習成長的方向；對面的南交點是習慣、舒適圈。</li>
+        <li>台灣 1945～1979 年間有幾年實施夏令時間（日光節約），出生證明上的時間會比標準時間快 1 小時，本頁會自動扣回。</li>
+      </ul>
+    </details>
+  </main>
+  <script src="assets/astro.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
