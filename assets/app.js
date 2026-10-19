@@ -106,6 +106,21 @@
     ['福德宮', '朋友、團體、願望'], ['玄秘宮', '潛意識、獨處、隱藏的事']
   ];
 
+  const HOUSE_DETAIL = [
+    '代表妳自己：外表、氣質、第一印象和面對世界的方式。宮首就是上升星座，落在這裡的行星會強烈影響個性與外在形象。',
+    '代表自己賺的錢、收入來源、理財習慣，也代表看重什麼、覺得自己值多少（價值觀與自我價值感）。',
+    '代表溝通表達、學習方式、兄弟姊妹與鄰居、日常短途移動，也跟寫作、說話、資訊交流有關。',
+    '代表家庭與原生家庭、父母（常指照顧者）、房子與不動產、內心的安全感，以及晚年生活。',
+    '代表戀愛（談戀愛的過程，不是婚姻）、興趣娛樂、創作與自我表現、子女，也包括投資玩樂的運氣。',
+    '代表日常工作與職場環境、同事、健康與身體保養、生活作息和習慣，也包括寵物。',
+    '代表婚姻與長期伴侶、合作夥伴、合約關係，也代表容易吸引什麼樣的人。宮首是下降點，正對上升。',
+    '代表共同的錢（配偶收入、貸款、保險、遺產）、親密關係、深層心理，以及危機後的轉變與重生。',
+    '代表出國遠行、留學與高等教育、宗教哲學與人生信念，也跟法律、出版、長途貿易有關。',
+    '代表事業目標、社會地位、名聲與成就，也常指父親或上司等權威人物。宮首就是天頂（MC）。',
+    '代表朋友、社群團體、人脈，對未來的願望與理想，也代表從事業得到的回報。',
+    '代表潛意識、獨處與休息、不為人知的事、靈性與直覺，也跟醫院、修行、默默付出有關。'
+  ];
+
   const ASPECTS = [
     { name: '合相', angle: 0, orb: 8, sym: '☌', nature: '融合', cls: 'conj', text: '兩股力量綁在一起，特質互相放大' },
     { name: '六分相', angle: 60, orb: 5, sym: '⚹', nature: '和諧', cls: 'soft', text: '互相幫忙，稍微努力就能發揮' },
@@ -540,17 +555,24 @@
   function houseTable(ch) {
     const { cusps, system } = ch.houses;
     const rows = cusps.map((c, i) => {
-      const inside = ch.list.filter((b) => !POINTS[b.key] && b.house === i + 1)
-        .map((b) => `<span class="pill">${glyph(b)} ${b.name}</span>`).join('') || '<span class="empty">—</span>';
-      const s = SIGNS[signIndex(c)];
+      const bodies = ch.list.filter((b) => !POINTS[b.key] && b.house === i + 1);
+      const inside = bodies.map((b) => `<span class="pill">${glyph(b)} ${b.name}</span>`).join('') || '<span class="empty">空宮</span>';
+      const idx = signIndex(c);
+      const s = SIGNS[idx];
+      const area = HOUSES[i][1].split('、').slice(0, 2).join('、');
+      let read = `宮首${s.name}：面對${area}時，態度偏向${SIGN_KEYWORDS[idx]}。`;
+      read += bodies.length
+        ? `宮內有${bodies.map((b) => `${b.name}（${b.short}）`).join('、')}，這些特質會在這個領域特別活躍。`
+        : '空宮不代表不重要，只是人生不特別聚焦在這裡，看宮首星座就好。';
       return `<tr><td class="hnum">${i + 1}</td><td>${HOUSES[i][0]}</td>
         <td class="pos"><span class="sym ${ELEMENT_CLASS[s.element]}">${s.sym}\uFE0E</span>${s.name} <small>${fmtDegree(c)}</small></td>
-        <td>${HOUSES[i][1]}</td><td>${inside}</td></tr>`;
+        <td><b>${HOUSES[i][1]}</b><span class="house-hint">${HOUSE_DETAIL[i]}</span><span class="house-read">${read}</span></td>
+        <td>${inside}</td></tr>`;
     }).join('');
     const sysNote = system === 'Placidus' ? '' : '出生地緯度太高，改用 Porphyry 分宮制。';
     return `<h3>十二宮位</h3><p class="summary">${sysNote}宮首星座代表這個生活領域的態度，宮內有星代表人生會特別著重這一塊。</p>
       <div class="table-wrap"><table class="houses">
-      <thead><tr><th>宮</th><th>名稱</th><th>宮首星座</th><th>主題</th><th>宮內星體</th></tr></thead>
+      <thead><tr><th>宮</th><th>名稱</th><th>宮首星座</th><th>主題與解說</th><th>宮內星體</th></tr></thead>
       <tbody>${rows}</tbody></table></div>`;
   }
 
@@ -715,8 +737,23 @@
     });
   }
 
+  // 只有線上版（github.io）才計數；同一個分頁重新整理不重複計算
+  function initViews() {
+    const el = $('views');
+    if (!/\.github\.io$/.test(location.hostname)) return;
+    const seen = sessionStorage.getItem('star-sign.counted');
+    const url = `https://abacus.jasoncameron.dev/${seen ? 'get' : 'hit'}/tomicahuang-star-sign/views`;
+    fetch(url).then((r) => (r.ok ? r.json() : Promise.reject(r.status))).then((d) => {
+      if (typeof d.value !== 'number') return;
+      sessionStorage.setItem('star-sign.counted', '1');
+      el.textContent = `瀏覽次數 ${d.value.toLocaleString('zh-TW')}`;
+      el.hidden = false;
+    }).catch(() => {});
+  }
+
   function init() {
     initTheme();
+    initViews();
     buildPlaceSelect();
     $('place').value = '台北';
     syncFormState();

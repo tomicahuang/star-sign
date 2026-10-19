@@ -67,7 +67,10 @@ main { max-width: 860px; margin: 0 auto; padding: 20px 16px 48px; }
 
 .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 8px 0 18px; }
 h1 { margin: 0; font-size: 26px; color: var(--gold); letter-spacing: 1px; }
-#theme { flex: none; padding: 6px 14px; font-size: 14px; border-radius: 999px; }
+.top-right { flex: none; display: flex; align-items: center; gap: 10px; }
+.version { font-size: 12px; color: var(--sub); border: 1px solid var(--line); border-radius: 999px; padding: 2px 9px; }
+#theme { padding: 6px 14px; font-size: 14px; border-radius: 999px; }
+.site-foot { text-align: center; font-size: 12px; color: var(--sub); min-height: 1.4em; }
 h1 small { font-size: 15px; color: var(--sub); font-weight: normal; margin-left: 6px; }
 h2 { margin: 0 0 4px; font-size: 20px; color: var(--gold); }
 
@@ -203,6 +206,7 @@ td small { color: var(--sub); }
 td.body { white-space: nowrap; font-weight: bold; }
 td.pos { white-space: nowrap; }
 td.house, td.hnum { white-space: nowrap; color: var(--sub); }
+.houses td:nth-child(2) { white-space: nowrap; }
 td .sym { font-size: 18px; margin-right: 4px; }
 .planets tr.fire .sym { color: var(--fire); }
 .planets tr.earth .sym { color: var(--earth); }
@@ -221,10 +225,18 @@ td .sym { font-size: 18px; margin-right: 4px; }
 .asp-sym { font-family: "Segoe UI Symbol", sans-serif; color: var(--sub); margin: 0 2px; }
 .aspects td:first-child { white-space: nowrap; }
 
-.help summary { cursor: pointer; color: var(--gold); }
+.house-read { display: block; margin-top: 4px; font-size: 13px; }
+
+.help h2 { margin-bottom: 6px; }
+.help details { border-top: 1px solid var(--line); padding: 10px 0; }
+.help details:last-child { padding-bottom: 0; }
+.help summary { cursor: pointer; color: var(--gold); font-weight: bold; }
 .help ul { margin: 10px 0 0; padding-left: 20px; font-size: 14px; color: var(--sub); }
 .help li { margin-bottom: 6px; }
 .help b { color: var(--text); }
+.help details .summary { margin: 10px 0; }
+.help-houses { margin-top: 10px; color: var(--sub); }
+.help-houses td:first-child, .help-houses td:nth-child(2) { white-space: nowrap; color: var(--text); }
 
 @media (max-width: 680px) {
   .cards { grid-template-columns: 1fr; }
@@ -236,6 +248,9 @@ td .sym { font-size: 18px; margin-right: 4px; }
   .planets td:last-child, .aspects td:last-child { grid-column: 1 / -1; }
   .houses tr { grid-template-columns: auto auto 1fr; }
   .houses td:nth-child(4), .houses td:nth-child(5) { grid-column: 1 / -1; }
+  .help-houses tr { grid-template-columns: auto 1fr; }
+  .help-houses td:last-child { grid-column: 1 / -1; }
+  h1 small { display: block; margin: 2px 0 0; }
   .row.three { grid-template-columns: 1fr 1fr; }
   .row.three label:last-child { grid-column: 1 / -1; }
 }
