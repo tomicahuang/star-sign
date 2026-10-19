@@ -6,14 +6,15 @@
   <title>星座速查・星盤</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌙</text></svg>">
   <script>if (localStorage.getItem('star-sign.theme') === 'light') document.documentElement.dataset.theme = 'light';</script>
-  <link rel="stylesheet" href="assets/style.css?v=1.3">
+  <link rel="stylesheet" href="assets/style.css?v=1.4">
 </head>
 <body>
   <main>
     <div class="top">
       <h1>星座速查 <small>太陽・月亮・上升・完整星盤</small></h1>
       <div class="top-right">
-        <span class="version" title="2026/10/19 更新">v1.3</span>
+        <span id="views" class="views" hidden></span>
+        <span class="version" title="2026/10/19 更新">v1.4</span>
         <button id="theme" type="button">白底</button>
       </div>
     </div>
@@ -134,10 +135,8 @@
         </ul>
       </details>
     </section>
-
-    <footer class="site-foot"><span id="views" hidden></span></footer>
   </main>
-  <script src="assets/astro.js?v=1.3"></script>
-  <script src="assets/app.js?v=1.3"></script>
+  <script src="assets/astro.js?v=1.4"></script>
+  <script src="assets/app.js?v=1.4"></script>
 </body>
 </html>
